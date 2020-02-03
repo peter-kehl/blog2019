@@ -49,10 +49,12 @@ public class UploadController {
       RequestMethod.PATCH, RequestMethod.HEAD, RequestMethod.DELETE, RequestMethod.GET })
   public void upload(HttpServletRequest servletRequest,
       HttpServletResponse servletResponse) throws IOException {
+    String uploadURI = servletRequest.getRequestURI();
+    Application.logger.info("UPLOAD URI: " +uploadURI);
+    Application.logger.info("CUSTOM-HEADER: " +servletRequest.getHeader("CUSTOM-HEADER"));
+    Application.logger.info("CUSTOM-PARAM: " +servletRequest.getParameter("CUSTOM-PARAM"));
     this.tusFileUploadService.process(servletRequest, servletResponse);
 
-    String uploadURI = servletRequest.getRequestURI();
-    
     UploadInfo uploadInfo = null;
     try {
       uploadInfo = this.tusFileUploadService.getUploadInfo(uploadURI);
@@ -61,6 +63,7 @@ public class UploadController {
       Application.logger.error("get upload info", e);
     }
 
+    if (uploadInfo != null) Application.logger.info("UPLOAD FILENAME: " +uploadInfo.getFileName());
     if (uploadInfo != null && !uploadInfo.isUploadInProgress()) {
       try (InputStream is = this.tusFileUploadService.getUploadedBytes(uploadURI)) {
         Path output = this.uploadDirectory.resolve(uploadInfo.getFileName());
