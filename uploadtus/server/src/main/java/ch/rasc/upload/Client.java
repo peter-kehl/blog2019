@@ -34,7 +34,10 @@ public class Client {
 
     // Upload file to server
     TusClient client = new TusClient();
-    client.setUploadCreationURL(URI.create("http://localhost:8080/upload?CUSTOM-PARAMETER=custom-parameter-value").toURL());
+    String url = "http://localhost:8080/upload?CUSTOM-PARAMETER=custom-parameter-value"; // CUSTOM-PARAMETER was ignored
+    // The URL here has to match URL set on the server with withUploadURI(). So we can't pass parameter-like values in the URL itself.
+    //String url = "http://localhost:8080/upload/identifier/hash/";
+    client.setUploadCreationURL(URI.create(url).toURL());
     client.enableResuming(new TusURLMemoryStore());
     client.setHeaders(Collections.singletonMap("CUSTOM-HEADER", "custom-header-value"));
 
