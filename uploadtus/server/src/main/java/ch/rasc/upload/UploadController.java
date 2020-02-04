@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import me.desair.tus.server.TusFileUploadService;
 import me.desair.tus.server.exception.TusException;
@@ -45,14 +46,16 @@ public class UploadController {
     this.tusUploadDirectory = Paths.get(appProperties.getTusUploadDirectory());
   }
 
+  // When we had 'customparam' here, it was passed through only on the first request per file. Any subsequent requests (for the rest of the same file) didn't have customparam (neither in HttpServletRequest, not passed through Spring).
   @RequestMapping(value = { "/upload", "/upload/**" }, method = { RequestMethod.POST,
-      RequestMethod.PATCH, RequestMethod.HEAD, RequestMethod.DELETE, RequestMethod.GET })
+      RequestMethod.PATCH, RequestMethod.HEAD, RequestMethod.DELETE, RequestMethod.GET }/*,
+      params = {"customparam"}/**/)
   public void upload(HttpServletRequest servletRequest,
-      HttpServletResponse servletResponse) throws IOException {
+      HttpServletResponse servletResponse/*, @RequestParam(required=false, defaultValue="NONE") String customparam/**/) throws IOException {
     String uploadURI = servletRequest.getRequestURI();
     Application.logger.info("UPLOAD URI: " +uploadURI);
     Application.logger.info("CUSTOM-HEADER: " +servletRequest.getHeader("CUSTOM-HEADER"));
-    Application.logger.info("CUSTOM-PARAM: " +servletRequest.getParameter("CUSTOM-PARAM"));
+    Application.logger.info("customparam: " +servletRequest.getParameter("customparam"));
     this.tusFileUploadService.process(servletRequest, servletResponse);
 
     UploadInfo uploadInfo = null;

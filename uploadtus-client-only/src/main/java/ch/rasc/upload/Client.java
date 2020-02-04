@@ -22,7 +22,7 @@ public class Client {
     Path testFile = Paths.get("/tmp/upload.png");
     // Upload file to server
     final TusClient client = new TusClient();
-    String url = "http://localhost:8080/upload?CUSTOM-PARAMETER=custom-parameter-value"; // CUSTOM-PARAMETER was ignored
+    String url = "http://localhost:8080/upload?customparam=custom-parameter-value"; // CUSTOM-PARAMETER was ignored
     // The URL here has to match URL set on the server with withUploadURI(). So we can't pass parameter-like values in the URL itself.
     //String url = "http://localhost:8080/upload/identifier/hash/";
     client.setUploadCreationURL(URI.create(url).toURL());
