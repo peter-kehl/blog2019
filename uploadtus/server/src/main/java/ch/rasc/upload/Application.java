@@ -22,6 +22,8 @@ public class Application {
   @Bean
   public TusFileUploadService tusFileUploadService(AppProperties appProperties) {
     return new TusFileUploadService().withStoragePath(appProperties.getTusUploadDirectory())
-        .withUploadURI("/upload");
+        //.withUploadURI("/upload");
+        // If this uses a Regex sub-pattern (as a String), then it MUST end with a slash /. However, if it's a fixed String (no Regex characters), then it doesn't have to end with a slash /.
+        .withUploadURI("/upload/[^/]+/[^/]+/");
   }
 }
