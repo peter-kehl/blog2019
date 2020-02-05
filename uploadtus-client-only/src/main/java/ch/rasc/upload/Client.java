@@ -22,7 +22,7 @@ public class Client {
     Path testFile = Paths.get("/tmp/upload.png");
     // Upload file to server
     final TusClient client = new TusClient();
-    //String url = "http://localhost:8080/upload?customparam=custom-parameter-value"; // CUSTOM-PARAMETER was ignored
+    //String url = "http://localhost:8080/upload?customparam=custom-parameter-value"; // "customparam" was passed only on the first HTTP request, but not on subsequent ones!
     // The URL here has to match URL (or its pattern) set on the server with withUploadURI().
     String url = "http://localhost:8080/upload/identifier/hash/";
     client.setUploadCreationURL(URI.create(url).toURL());
@@ -36,7 +36,7 @@ public class Client {
       @Override
       protected void makeAttempt() throws ProtocolException, IOException {
         TusUploader uploader = client.resumeOrCreateUpload(upload);
-        uploader.setChunkSize(1024);
+        uploader.setChunkSize(1024); // Otherwise it's the default: 2MB
 
         do {
           long totalBytes = upload.getSize();

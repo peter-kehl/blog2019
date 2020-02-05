@@ -52,11 +52,12 @@ public class UploadController {
     @PathVariable String id, @PathVariable String hash
   ) throws IOException {
     String uploadURI = servletRequest.getRequestURI();
+    Application.logger.info("UPLOAD HTTP request method: " +servletRequest.getMethod());
     Application.logger.info("UPLOAD URI: " +uploadURI);
     Application.logger.info("CUSTOM-HEADER: " +servletRequest.getHeader("CUSTOM-HEADER"));
     Application.logger.info("customparam: " +servletRequest.getParameter("customparam"));
-    Application.logger.info("URI part identifier: " +id);
-    Application.logger.info("URI part hash: " +hash);
+    Application.logger.info("URI custom first part (identifier): " +id);
+    Application.logger.info("URI custom second part (hash): " +hash);
     this.tusFileUploadService.process(servletRequest, servletResponse);
 
     UploadInfo uploadInfo = null;
